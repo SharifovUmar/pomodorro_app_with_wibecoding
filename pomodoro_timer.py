@@ -1,8 +1,7 @@
 import sys
 from PySide6.QtWidgets import (
     QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout,
-    QPushButton, QLabel, QSystemTrayIcon, QMenu, QStyle,
-    QDialog, QSpinBox, QDialogButtonBox, QFormLayout
+    QPushButton, QLabel, QSystemTrayIcon, QMenu, QStyle
 )
 from PySide6.QtCore import QTimer, Qt, QPropertyAnimation, QEasingCurve
 from PySide6.QtGui import QAction, QFont, QPalette, QColor, QIcon
@@ -10,16 +9,13 @@ from PySide6.QtWidgets import QGraphicsDropShadowEffect
 from winotify import Notification
 
 
-
-
-
 class PomodoroTimer(QMainWindow):
     def __init__(self):
         super().__init__()
 
         # ===== НАСТРОЙКИ =====
-        self.WORK_TIME = 25 * 60  # 25 минут для работы
-        self.BREAK_TIME = 5 * 60   # 5 минут для отдыха
+        self.WORK_TIME = 1 * 10
+        self.BREAK_TIME = 5 * 60
 
         # ===== СОСТОЯНИЕ =====
         self.is_work_mode = True
@@ -37,13 +33,13 @@ class PomodoroTimer(QMainWindow):
         self.color_animation = QPropertyAnimation(self, b"palette")
         self.color_animation.setDuration(800)
         self.color_animation.setEasingCurve(QEasingCurve.InOutQuad)
-        
+
         # ===== СИСТЕМНЫЙ ТРЕЙ =====
         self.init_tray_icon()
-        
+
         # ===== ПЕРЕМЕЩЕНИЕ ОКНА =====
         self.old_pos = None
-        
+
         # ===== ОБРАБОТКА ЗАКРЫТИЯ ОКНА =====
         # Переопределяем обработчик закрытия окна
         self.setWindowFlags(self.windowFlags() & ~Qt.WindowCloseButtonHint)
@@ -53,11 +49,11 @@ class PomodoroTimer(QMainWindow):
     def init_ui(self):
         self.setWindowTitle("Pomodoro Timer")
         self.setFixedSize(500, 400)
-        
+
         # Убираем рамку окна для более современного вида
         self.setWindowFlags(Qt.FramelessWindowHint)
         self.setAttribute(Qt.WA_TranslucentBackground)
-        
+
         # Создаем основной контейнер с закругленными углами
         central = QWidget(self)
         central.setObjectName("centralWidget")
@@ -65,34 +61,20 @@ class PomodoroTimer(QMainWindow):
 
         # Добавляем эффект неонового свечения с начальным цветом
         self.add_neon_glow_effect(central, "#FF6B6B", 25)
-        
+
         # Основной layout с отступами
         main_layout = QVBoxLayout(central)
         main_layout.setContentsMargins(30, 30, 30, 30)
-        
-        # Верхняя панель с кнопками
+
+        # Верхняя панель с кнопкой закрытия
         top_layout = QHBoxLayout()
         top_layout.setContentsMargins(0, 0, 0, 10)
-        
-        # Кнопка настроек
-        self.settings_button = QPushButton("⚙")
-        self.settings_button.setObjectName("topSettingsButton")
-        try:
-            self.settings_button.setIcon(QIcon("settings_icon.png"))
-        except:
-            # Используем стандартную иконку, если файл не найден
-            self.settings_button.setIcon(self.style().standardIcon(QStyle.SP_FileDialogDetailedView))
-        self.settings_button.clicked.connect(self.open_settings)
-        top_layout.addWidget(self.settings_button)
-        
+
         # Кнопка сворачивания
         self.minimize_button = QPushButton("−")
         self.minimize_button.setObjectName("minimizeButton")
         self.minimize_button.clicked.connect(self.showMinimized)
-        
-        # Добавляем эффект свечения к кнопке настроек
-        self.add_neon_glow_effect(self.settings_button, "#6C63FF", 15)
-        
+
         # Кнопка закрытия
         self.close_button = QPushButton("×")
         self.close_button.setObjectName("closeButton")
@@ -100,24 +82,24 @@ class PomodoroTimer(QMainWindow):
         top_layout.addStretch()
         top_layout.addWidget(self.minimize_button)
         top_layout.addWidget(self.close_button)
-        
+
         main_layout.addLayout(top_layout)
-        
+
         # Заголовок с названием режима
         self.mode_label = QLabel("Время работы")
         self.mode_label.setObjectName("modeLabel")
         self.mode_label.setAlignment(Qt.AlignCenter)
         main_layout.addWidget(self.mode_label)
-        
+
         # Таймер с более крупным шрифтом
         self.timer_label = QLabel(self.format_time(self.time_left))
         self.timer_label.setObjectName("timerLabel")
         self.timer_label.setAlignment(Qt.AlignCenter)
         main_layout.addWidget(self.timer_label)
-        
+
         # Контейнер для кнопок
         buttons_layout = QHBoxLayout()
-        
+
         # Кнопка старта/паузы с улучшенным дизайном
         self.start_button = QPushButton(" Старт")
         self.start_button.setObjectName("startButton")
@@ -131,7 +113,7 @@ class PomodoroTimer(QMainWindow):
 
         # Добавляем эффект свечения к кнопке старта
         self.add_neon_glow_effect(self.start_button, "#FF6B6B", 15)
-        
+
         # Кнопка сброса
         self.reset_button = QPushButton(" Сброс")
         self.reset_button.setObjectName("resetButton")
@@ -142,16 +124,12 @@ class PomodoroTimer(QMainWindow):
             self.reset_button.setIcon(self.style().standardIcon(QStyle.SP_BrowserReload))
         self.reset_button.clicked.connect(self.reset_timer)
         buttons_layout.addWidget(self.reset_button)
-        
-
-        
-
 
         # Добавляем эффект свечения к кнопке сброса
         self.add_neon_glow_effect(self.reset_button, "#4ECDC4", 15)
-        
+
         main_layout.addLayout(buttons_layout)
-        
+
         # Применяем стили
         self.setStyleSheet("""
             #centralWidget {
@@ -252,30 +230,8 @@ class PomodoroTimer(QMainWindow):
             #minimizeButton:pressed {
                 background-color: rgba(78, 205, 196, 0.9);
             }
-            #topSettingsButton {
-                font-family: "Segoe UI", Arial, sans-serif;
-                font-size: 18px;
-                font-weight: 600;
-                color: #AAAAAA;
-                background-color: transparent;
-                border: none;
-                border-radius: 15px;
-                width: 30px;
-                height: 30px;
-                padding: 0;
-                margin: 0;
-                margin-right: 5px;
-            }
-            #topSettingsButton:hover {
-                color: white;
-                background-color: rgba(108, 99, 255, 0.7);
-            }
-            #topSettingsButton:pressed {
-                background-color: rgba(108, 99, 255, 0.9);
-            }
-
         """)
-        
+
         self.set_background_color("#FF6B6B")
 
     def add_neon_glow_effect(self, widget, color="#6366F1", blur_radius=25):
@@ -304,7 +260,7 @@ class PomodoroTimer(QMainWindow):
         """Инициализация иконки в системном трее"""
         # Создаем иконку в системном трее
         self.tray_icon = QSystemTrayIcon(self)
-        
+
         # Устанавливаем иконку
         try:
             icon = QIcon("icon.png")
@@ -314,35 +270,35 @@ class PomodoroTimer(QMainWindow):
         except:
             # Используем стандартную иконку
             self.tray_icon.setIcon(self.style().standardIcon(QStyle.SP_ComputerIcon))
-        
+
         # Создаем контекстное меню для иконки
         tray_menu = QMenu()
-        
+
         # Добавляем действие для показа/скрытия окна
         show_action = QAction("Показать/Скрыть", self)
         show_action.triggered.connect(self.toggle_window_visibility)
         tray_menu.addAction(show_action)
-        
+
         # Добавляем действие для выхода
         quit_action = QAction("Выход", self)
         quit_action.triggered.connect(self.force_quit)
         tray_menu.addAction(quit_action)
-        
+
         # Устанавливаем контекстное меню
         self.tray_icon.setContextMenu(tray_menu)
-        
+
         # Показываем иконку в системном трее
         self.tray_icon.show()
-        
+
         # Убедимся, что иконка действительно видима
         if not self.tray_icon.isVisible():
             # Если иконка не видима, попробуем снова
             self.tray_icon.setIcon(self.style().standardIcon(QStyle.SP_ComputerIcon))
             self.tray_icon.show()
-        
+
         # Обработка двойного клика по иконке
         self.tray_icon.activated.connect(self.on_tray_icon_activated)
-    
+
     def toggle_window_visibility(self):
         """Переключает видимость окна"""
         if self.isVisible():
@@ -351,16 +307,16 @@ class PomodoroTimer(QMainWindow):
             self.show()
             self.raise_()
             self.activateWindow()
-    
+
     def on_tray_icon_activated(self, reason):
         """Обработка активации иконки в системном трее"""
         if reason == QSystemTrayIcon.DoubleClick:
             self.toggle_window_visibility()
-    
+
     def minimize_to_tray(self):
         """Сворачивает окно в системный трей"""
         self.hide()
-    
+
     def restore_from_tray(self):
         """Восстанавливает окно из системного трея"""
         self.show()
@@ -386,7 +342,7 @@ class PomodoroTimer(QMainWindow):
             except:
                 self.start_button.setIcon(self.style().standardIcon(QStyle.SP_MediaPause))
             self.is_running = True
-            
+
             # Сворачиваем окно в системный трей
             # if self.is_work_mode:
             #     self.show_notification("Таймер запущен", "Время работать 💪")
@@ -397,28 +353,6 @@ class PomodoroTimer(QMainWindow):
                 self.show_notification("Отдых", "Начался отдых ☕")
 
             QTimer.singleShot(300, self.minimize_to_tray)
-    
-
-        dialog = SettingsDialog(
-            self,
-            work_time=self.WORK_TIME // 60,  # Конвертируем секунды в минуты
-            break_time=self.BREAK_TIME // 60
-        )
-        
-        if dialog.exec_() == QDialog.Accepted:
-            # Получаем новые значения
-            values = dialog.get_values()
-            self.WORK_TIME = values['work_time']
-            self.BREAK_TIME = values['break_time']
-            
-            # Обновляем текущее время в зависимости от режима
-            if self.is_work_mode:
-                self.time_left = self.WORK_TIME
-            else:
-                self.time_left = self.BREAK_TIME
-            
-            # Обновляем отображение таймера
-            self.timer_label.setText(self.format_time(self.time_left))
 
     def reset_timer(self):
         """Сбрасывает таймер в начальное состояние"""
@@ -429,7 +363,7 @@ class PomodoroTimer(QMainWindow):
             self.start_button.setIcon(QIcon("play_icon.png"))
         except:
             self.start_button.setIcon(self.style().standardIcon(QStyle.SP_MediaPlay))
-        
+
         # Сбрасываем в зависимости от текущего режима
         if self.is_work_mode:
             self.time_left = self.WORK_TIME
@@ -437,7 +371,7 @@ class PomodoroTimer(QMainWindow):
         else:
             self.time_left = self.BREAK_TIME
             self.mode_label.setText("Время отдыха")
-            
+
         self.timer_label.setText(self.format_time(self.time_left))
 
     def update_timer(self):
@@ -455,7 +389,7 @@ class PomodoroTimer(QMainWindow):
             self.start_button.setIcon(QIcon("play_icon.png"))
         except:
             self.start_button.setIcon(self.style().standardIcon(QStyle.SP_MediaPlay))
-        
+
         # Восстанавливаем окно из системного трея
         self.restore_from_tray()
 
@@ -493,7 +427,7 @@ class PomodoroTimer(QMainWindow):
         self.timer_label.setText(self.format_time(self.time_left))
 
     # ================= ОБРАБОТКА ЗАКРЫТИЯ ОКНА =================
-    
+
     def closeEvent(self, event):
         """Обработка события закрытия окна"""
         event.ignore()  # Игнорируем событие закрытия
@@ -502,19 +436,19 @@ class PomodoroTimer(QMainWindow):
     def force_quit(self):
         """Принудительное завершение приложения"""
         QApplication.quit()
-    
+
     # ================= ПЕРЕМЕЩЕНИЕ ОКНА =================
-    
+
     def mousePressEvent(self, event):
         """Обработка нажатия кнопки мыши"""
         if event.button() == Qt.LeftButton:
             self.old_pos = event.globalPosition().toPoint()
-    
+
     def mouseReleaseEvent(self, event):
         """Обработка отпускания кнопки мыши"""
         if event.button() == Qt.LeftButton:
             self.old_pos = None
-    
+
     def mouseMoveEvent(self, event):
         """Обработка перемещения мыши для перетаскивания окна"""
         if self.old_pos is not None:
