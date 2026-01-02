@@ -86,6 +86,31 @@ BASE_STYLE = """
         color: white;
         margin-top: 10px;
     }
+    #playerPanel {
+        background-color: rgba(255, 255, 255, 0.35);
+        border: 1px solid rgba(255, 255, 255, 0.4);
+        margin: 10px 0;
+    }
+    #playerLabel {
+        font-family: "SF Pro Display", "Segoe UI", Arial, sans-serif;
+        font-size: 18px;
+        font-weight: 600;
+        color: white;
+        margin-bottom: 10px;
+    }
+    #radioButton {
+        background-color: rgba(255, 255, 255, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.4);
+        border-radius: 30px;
+        color: white;
+    }
+    #radioButton:hover {
+        background-color: rgba(255, 255, 255, 0.3);
+        border: 1px solid rgba(255, 255, 255, 0.6);
+    }
+    #radioButton:pressed {
+        background-color: rgba(255, 255, 255, 0.4);
+    }
     #topPanel {
         background-color: transparent;
     }

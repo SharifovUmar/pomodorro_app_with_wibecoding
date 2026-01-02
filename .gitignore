@@ -31,3 +31,4 @@ __pycache__/
 *.VC.user
 *.VC.vcproj.suo
 *.VC.vcproj.scc
+activate.bat

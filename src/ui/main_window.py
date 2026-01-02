@@ -12,6 +12,7 @@ from ..core.timer import PomodoroTimer
 from ..styles.style import BASE_STYLE, WORK_MODE_BUTTONS, BREAK_MODE_BUTTONS
 from .timer_widget import TimerWidget
 from .settings_widget import SettingsWidget
+from .player_widget import PlayerWidget
 
 
 class MainWindow(QMainWindow):
@@ -32,6 +33,7 @@ class MainWindow(QMainWindow):
 
         # Состояние UI
         self.settings_visible = False
+        self.player_visible = False
         self.old_pos = None
 
         # Инициализация UI
@@ -95,6 +97,7 @@ class MainWindow(QMainWindow):
         self.timer_widget.start_clicked.connect(self._toggle_timer)
         self.timer_widget.reset_clicked.connect(self._reset_timer)
         self.timer_widget.settings_clicked.connect(self._toggle_settings)
+        self.timer_widget.radio_clicked.connect(self._toggle_player)
         content_layout.addWidget(self.timer_widget)
 
         main_layout.addWidget(content_container)
@@ -103,6 +106,10 @@ class MainWindow(QMainWindow):
         self.settings_widget = SettingsWidget()
         self.settings_widget.value_changed.connect(self._on_settings_value_changed)
         main_layout.addWidget(self.settings_widget)
+        
+        # Панель плеера
+        self.player_widget = PlayerWidget()
+        main_layout.addWidget(self.player_widget)
 
         # Верхняя панель с кнопками управления окном
         top_panel = QWidget()
@@ -285,6 +292,11 @@ class MainWindow(QMainWindow):
         """Переключает видимость панели настроек."""
         self.settings_widget.toggle_visibility()
         self.settings_visible = not self.settings_visible
+        
+    def _toggle_player(self):
+        """Переключает видимость панели плеера."""
+        self.player_widget.toggle_visibility()
+        self.player_visible = not self.player_visible
 
     def _on_settings_value_changed(self, value):
         """Обработчик изменения значения в настройках."""

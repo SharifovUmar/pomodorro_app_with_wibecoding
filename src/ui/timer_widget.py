@@ -10,6 +10,7 @@ class TimerWidget(QWidget):
     start_clicked = Signal()
     reset_clicked = Signal()
     settings_clicked = Signal()
+    radio_clicked = Signal()
 
     def __init__(self, parent=None):
         super().__init__(parent)
@@ -81,6 +82,23 @@ class TimerWidget(QWidget):
         self.settings_button.setIconSize(self.settings_button.size() * 0.6)
         self.settings_button.clicked.connect(self.settings_clicked.emit)
         buttons_layout.addWidget(self.settings_button)
+
+        # Кнопка радио
+        self.radio_button = QPushButton()
+        self.radio_button.setObjectName("radioButton")
+        self.radio_button.setFixedSize(60, 60)
+        self.radio_button.setCursor(Qt.PointingHandCursor)
+        try:
+            self.radio_button.setIcon(QIcon("radio.png"))
+        except:
+            # Используем стандартную иконку, если файл не найден
+            from PySide6.QtGui import QPixmap
+            pixmap = QPixmap(16, 16)
+            pixmap.fill(Qt.magenta)
+            self.radio_button.setIcon(QIcon(pixmap))
+        self.radio_button.setIconSize(self.radio_button.size() * 0.6)
+        self.radio_button.clicked.connect(self.radio_clicked.emit)
+        buttons_layout.addWidget(self.radio_button)
 
         layout.addWidget(buttons_container)
 
