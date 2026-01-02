@@ -111,6 +111,80 @@ BASE_STYLE = """
     #radioButton:pressed {
         background-color: rgba(255, 255, 255, 0.4);
     }
+    #stationCombo {
+        background-color: rgba(255, 255, 255, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.4);
+        border-radius: 8px;
+        padding: 8px 12px;
+        color: white;
+        font-family: "SF Pro Display", "Segoe UI", Arial, sans-serif;
+        font-size: 14px;
+        font-weight: 500;
+    }
+    #stationCombo::drop-down {
+        subcontrol-origin: padding;
+        subcontrol-position: top right;
+        width: 20px;
+        border-left-width: 0px;
+        border-left-color: rgba(255, 255, 255, 0.4);
+        border-left-style: solid;
+        border-top-right-radius: 4px;
+        border-bottom-right-radius: 4px;
+        background-color: rgba(255, 255, 255, 0.1);
+    }
+    #stationCombo::down-arrow {
+        image: none;
+        border-left: 4px solid transparent;
+        border-right: 4px solid transparent;
+        border-top: 4px solid rgba(255, 255, 255, 0.7);
+        width: 0;
+        height: 0;
+    }
+    #stationCombo QAbstractItemView {
+        background-color: rgba(40, 40, 40, 0.9);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        border-radius: 8px;
+        selection-background-color: rgba(78, 205, 196, 0.5);
+        color: white;
+        padding: 4px;
+    }
+    #playButton, #stopButton {
+        background-color: rgba(255, 255, 255, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.4);
+        border-radius: 25px;
+        color: white;
+    }
+    #playButton:hover, #stopButton:hover {
+        background-color: rgba(255, 255, 255, 0.3);
+        border: 1px solid rgba(255, 255, 255, 0.6);
+    }
+    #playButton:pressed, #stopButton:pressed {
+        background-color: rgba(255, 255, 255, 0.4);
+    }
+    #volumeSlider {
+        height: 6px;
+        background-color: rgba(255, 255, 255, 0.2);
+        border-radius: 3px;
+    }
+    #volumeSlider::groove:horizontal {
+        height: 6px;
+        background-color: rgba(255, 255, 255, 0.2);
+        border-radius: 3px;
+    }
+    #volumeSlider::handle:horizontal {
+        background-color: white;
+        width: 14px;
+        height: 14px;
+        border-radius: 7px;
+        margin: -4px 0;
+    }
+    #statusLabel {
+        font-family: "SF Pro Display", "Segoe UI", Arial, sans-serif;
+        font-size: 14px;
+        font-weight: 500;
+        color: rgba(255, 255, 255, 0.8);
+        margin-top: 10px;
+    }
     #topPanel {
         background-color: transparent;
     }
