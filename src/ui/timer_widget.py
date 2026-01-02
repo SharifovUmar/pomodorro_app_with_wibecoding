@@ -54,15 +54,6 @@ class TimerWidget(QWidget):
         self.start_button.setObjectName("startButton")
         self.start_button.setFixedSize(160, 60)
         self.start_button.setCursor(Qt.PointingHandCursor)
-        try:
-            self.start_button.setIcon(QIcon("play_icon.png"))
-        except:
-            # Используем стандартную иконку, если файл не найден
-            from PySide6.QtGui import QPixmap
-            pixmap = QPixmap(16, 16)
-            pixmap.fill(Qt.yellow)
-            self.start_button.setIcon(QIcon(pixmap))
-        self.start_button.setIconSize(self.start_button.size() * 0.15)
         self.start_button.clicked.connect(self.start_clicked.emit)
         buttons_layout.addWidget(self.start_button)
 

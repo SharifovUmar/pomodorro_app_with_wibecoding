@@ -251,19 +251,9 @@ class MainWindow(QMainWindow):
         if self.timer.is_running:
             self.timer.pause()
             self.timer_widget.set_start_button_text("Старт")
-            try:
-                self.timer_widget.set_start_button_icon("play_icon.png")
-            except:
-                # Используем стандартную иконку, если файл не найден
-                self.timer_widget.set_start_button_icon(None)
         else:
             self.timer.start()
             self.timer_widget.set_start_button_text("Пауза")
-            try:
-                self.timer_widget.set_start_button_icon("pause_icon.png")
-            except:
-                # Используем стандартную иконку, если файл не найден
-                self.timer_widget.set_start_button_icon(None)
 
             if self.timer.is_work_mode:
                 self.show_notification("Таймер запущен", "Время работать 💪")
@@ -277,7 +267,7 @@ class MainWindow(QMainWindow):
         self.timer.reset()
         self.timer_widget.set_start_button_text("Старт")
         try:
-            self.timer_widget.set_start_button_icon("play_icon.png")
+            self.timer_widget.set_start_button_icon("pause.svg")
         except:
             # Используем стандартную иконку, если файл не найден
             self.timer_widget.set_start_button_icon(None)
@@ -325,7 +315,7 @@ class MainWindow(QMainWindow):
         self.restore_from_tray()
         self.timer_widget.set_start_button_text("Старт")
         try:
-            self.timer_widget.set_start_button_icon("play_icon.png")
+            self.timer_widget.set_start_button_icon("pause.svg")
         except:
             # Используем стандартную иконку, если файл не найден
             self.timer_widget.set_start_button_icon(None)

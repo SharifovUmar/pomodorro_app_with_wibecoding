@@ -60,7 +60,7 @@ class PlayerWidget(QWidget):
         self.play_button.setObjectName("playButton")
         self.play_button.setFixedSize(50, 50)
         try:
-            self.play_button.setIcon(QIcon("play_icon.png"))
+            self.play_button.setIcon(QIcon("play.svg"))
         except:
             self.play_button.setText("▶")
         self.play_button.setIconSize(self.play_button.size() * 0.6)
@@ -72,7 +72,7 @@ class PlayerWidget(QWidget):
         self.stop_button.setObjectName("stopButton")
         self.stop_button.setFixedSize(50, 50)
         try:
-            self.stop_button.setIcon(QIcon("stop_icon.png"))
+            self.stop_button.setIcon(QIcon("stop.svg"))
         except:
             self.stop_button.setText("■")
         self.stop_button.setIconSize(self.stop_button.size() * 0.6)
@@ -144,7 +144,7 @@ class PlayerWidget(QWidget):
             self.player.pause()
             self.is_playing = False
             try:
-                self.play_button.setIcon(QIcon("play_icon.png"))
+                self.play_button.setIcon(QIcon("play.svg"))
             except:
                 self.play_button.setText("▶")
             self.status_label.setText("Пауза")
@@ -165,7 +165,7 @@ class PlayerWidget(QWidget):
             self.is_playing = True
             
             try:
-                self.play_button.setIcon(QIcon("pause_icon.png"))
+                self.play_button.setIcon(QIcon("pause.svg"))
             except:
                 self.play_button.setText("⏸")
             self.status_label.setText(f"Воспроизведение: {station_name}")
@@ -178,7 +178,7 @@ class PlayerWidget(QWidget):
         self.player.stop()
         self.is_playing = False
         try:
-            self.play_button.setIcon(QIcon("play_icon.png"))
+            self.play_button.setIcon(QIcon("play.svg"))
         except:
             self.play_button.setText("▶")
         self.status_label.setText("Остановлено")
